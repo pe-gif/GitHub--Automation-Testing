@@ -1,18 +1,19 @@
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.safari.SafariDriver;
 import java.time.Duration;
+
 import org.testng.annotations.*;
 
 
-public class createRepoTest  {
-    WebDriver safariDriver;
+public class createRepoTest {
+    WebDriver chromeDriver;
     WebDriverWait wait;
+
 
     @BeforeTest
     public void setuptest() {
@@ -22,37 +23,33 @@ public class createRepoTest  {
     }
     WebDriver setup()  {
         /// initialize test Driver function
-        System.setProperty("webdriver.safari.driver", "/usr/bin/safaridriver");
-        safariDriver = new SafariDriver();
-        safariDriver.get("https://www.github.com/login");
-        safariDriver.manage().window().maximize();
-        wait = new WebDriverWait(safariDriver, Duration.ofSeconds(3));
-        return safariDriver;
+        System.setProperty("webdriver.chrome.driver", "/Users/Yani/Documents/chromedriver");
+        chromeDriver = new ChromeDriver();
+        chromeDriver.get("https://www.github.com/login");
+        chromeDriver.manage().window().maximize();
+        wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(3));
+        return chromeDriver;
     }
 
-    @Test
+    @Test(priority = 0)
     public void login() throws InterruptedException {
-        WebDriver safariDriver = setup();
+        chromeDriver = setup();
         Thread.sleep(2000);
-        WebElement username = safariDriver.findElement(By.id("login_field"));
+        WebElement username = chromeDriver.findElement(By.id("login_field"));
         username.sendKeys("githubemailtest@gmail.com");
         Thread.sleep(2000);
-        WebElement password = safariDriver.findElement(By.id("password"));
+        WebElement password = chromeDriver.findElement(By.id("password"));
         password.sendKeys("Githubpassword123-");
         Thread.sleep(2000);
-        WebElement loginButton = safariDriver.findElement(By.name("commit"));
+        WebElement loginButton = chromeDriver.findElement(By.name("commit"));
         loginButton.click();
         Thread.sleep(2000);
 
 
     }
 
-//--------------------------------------------METHOD 1 -----------------------------------------------------------------------------
+//--------------------------------------------METHOD 1: create Repo -----------------------------------------------------------------------------
 
-    @BeforeMethod
-    public void CreateRepoMethod() {
-        System.out.println("This method will create a new repository on github");
-    }
     @Test(priority = 1)
     public void testCreateRepo() throws InterruptedException {
 
@@ -67,21 +64,21 @@ public class createRepoTest  {
         Thread.sleep(2000);
 
         //Inserting text into textbox
-        WebElement repoName = safariDriver.findElement(By.cssSelector(
+        WebElement repoName = chromeDriver.findElement(By.cssSelector(
                 "input[aria-describedby*='RepoNameInput-message']"));
         repoName.sendKeys("test_repo");
         Thread.sleep(1000);
 
         //scrolling
-        JavascriptExecutor scroll = (JavascriptExecutor) safariDriver;
+        JavascriptExecutor scroll = (JavascriptExecutor) chromeDriver;
         scroll.executeScript("window.scroll(0,300)","");
         Thread.sleep(1000);
 
         //clicking to make repo private and then public, then private
-        WebElement privateRepo = safariDriver.findElement(By.cssSelector("label[for=':rg:']"));
+        WebElement privateRepo = chromeDriver.findElement(By.cssSelector("label[for=':rg:']"));
         privateRepo.click();
         Thread.sleep(1000);
-        WebElement publicRepo = safariDriver.findElement(By.cssSelector("label[for=':rf:']"));
+        WebElement publicRepo = chromeDriver.findElement(By.cssSelector("label[for=':rf:']"));
         publicRepo.click();
         Thread.sleep(1000);
         privateRepo.click();
@@ -89,34 +86,33 @@ public class createRepoTest  {
 
 
         //adding a readme
-        WebElement addReadMe = safariDriver.findElement(By.cssSelector("label[for=':ri:']"));
+        WebElement addReadMe = chromeDriver.findElement(By.cssSelector("label[for=':ri:']"));
         addReadMe.click();
         Thread.sleep(2000);
 
         //click repository button
-        WebElement createRepoButton = safariDriver.findElement(By.xpath(
+        WebElement createRepoButton = chromeDriver.findElement(By.xpath(
                 "/html/body/div[1]/div[5]/main/react-app/div/form/div[6]/button/span/span"));
         createRepoButton.click();
         Thread.sleep(3000);
 
+        String repoLnk = chromeDriver.getCurrentUrl();
+        System.out.println("The url for the created repository is " + repoLnk);
     }
 
-    @AfterMethod
-    public void createRepoAfter() {
-        System.out.println("The repository has been created.");
-    }
-    //--------------------------------------------METHOD 2 -----------------------------------------------------------------------------
+    //--------------------------------------------METHOD 2: Rename Repo -----------------------------------------------------------------------------
 
-    @Test(priority = 2)
+    @Test(priority = 2, dependsOnMethods = "testCreateRepo")
     public void renameRepo() throws InterruptedException {
         //click on the settings tab
-        WebElement settings = safariDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
+        WebElement settings = chromeDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
         settings.click();
         Thread.sleep(2000);
 
         // Type new repo name on the textbox
-        WebElement renametxt = safariDriver.findElement(By.xpath("//*[@id=\"rename-field\"]"));
-        renametxt.sendKeys("GitHub Testing Report10");
+        WebElement renametxt = chromeDriver.findElement(By.xpath("//*[@id=\"rename-field\"]"));
+        renametxt.clear();
+        renametxt.sendKeys("GitHub Report Final");
         Thread.sleep(2000);
 
         //click rename button
@@ -136,17 +132,12 @@ public class createRepoTest  {
     }
 
 
-//--------------------------------------------METHOD 3 -----------------------------------------------------------------------------
+//--------------------------------------------METHOD 3: Add Contributors -----------------------------------------------------------------------------
 
-    @BeforeMethod
-    public void shareRepoBefore() {
-        System.out.println("This method will share the repository with a user ");
-
-    }
-    @Test(priority = 3)
-    public void shareRepo() throws InterruptedException {
+    @Test(priority = 3, dependsOnMethods = "renameRepo")
+    public void addContributors() throws InterruptedException {
         //click on the settings tab
-        WebElement settings = safariDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
+        WebElement settings = chromeDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
         settings.click();
         Thread.sleep(2000);
 
@@ -157,12 +148,12 @@ public class createRepoTest  {
         Thread.sleep(2000);
 
         //scrolling
-        JavascriptExecutor scroll = (JavascriptExecutor) safariDriver;
+        JavascriptExecutor scroll = (JavascriptExecutor) chromeDriver;
         scroll.executeScript("window.scroll(0,100)","");
         Thread.sleep(2000);
 
         //clicks on the add people button
-        WebElement addPpl = safariDriver.findElement(By.xpath("//span[text()='Add people']"));
+        WebElement addPpl = chromeDriver.findElement(By.xpath("//span[text()='Add people']"));
         addPpl.click();
         Thread.sleep(2000);
 
@@ -188,18 +179,12 @@ public class createRepoTest  {
 
     }
 
-//--------------------------------------------METHOD 4 -----------------------------------------------------------------------------
-
-
-    @BeforeMethod
-    public void addReadmeBefore() {
-        System.out.println("This method will add a readme description to the repository");
-    }
+//--------------------------------------------METHOD 4: Add Readme -----------------------------------------------------------------------------
 
     @Test(priority = 4)
     public void addReadme() throws InterruptedException {
         //click on code tab
-        WebElement codeTab = safariDriver.findElement(By.xpath("//span[@data-content='Code']"));
+        WebElement codeTab = chromeDriver.findElement(By.xpath("//span[@data-content='Code']"));
         codeTab.click();
         Thread.sleep(2000);
 
@@ -214,7 +199,8 @@ public class createRepoTest  {
                 "//*[@id=\"repo-content-pjax-container\"]/react-app/div/div/div[1]/div/div/div[2]/div[2]/div/div[3]/div[2]/div/div[2]/file-attachment/div/div/div[2]/div[2]/div")));
         readme.clear();
         Thread.sleep(2000);
-        readme.sendKeys("# GitHub Report \n\n testtesttesttesttesttesttesttesttesttesttesttesttest ");
+        readme.sendKeys("# GitHub Report Final \n\n This repository includes the report and .java files for our project" +
+                "in software testing.");
         Thread.sleep(2000);
 
         //view preview
@@ -236,27 +222,22 @@ public class createRepoTest  {
 
     }
 
-//--------------------------------------------METHOD 5 -----------------------------------------------------------------------------
-
-    @BeforeMethod
-    public void changevisibilityBefore() {
-        System.out.println("This method will change the visibility from private to public");
-    }
+//--------------------------------------------METHOD 5: Change Visibility -----------------------------------------------------------------------------
 
     @Test(priority = 5)
     public void changevisibility() throws InterruptedException {
         //click on the settings tab
-        WebElement settings = safariDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
+        WebElement settings = chromeDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
         settings.click();
         Thread.sleep(2000);
 
         //scrolling
-        JavascriptExecutor scroll = (JavascriptExecutor) safariDriver;
-        scroll.executeScript("window.scroll(0,3000)","");
+        JavascriptExecutor scroll = (JavascriptExecutor) chromeDriver;
+        scroll.executeScript("window.scroll(0,3000)", "");
         Thread.sleep(2000);
 
         //clicks on the visibility button
-        WebElement visibilityButton = safariDriver.findElement(By.xpath("//span[text()='Change visibility']/ancestor::button"));
+        WebElement visibilityButton = chromeDriver.findElement(By.xpath("//span[text()='Change visibility']/ancestor::button"));
         visibilityButton.click();
         Thread.sleep(1000);
 
@@ -285,17 +266,14 @@ public class createRepoTest  {
         Thread.sleep(3000);
 
         //scroll to confirm change
-        scroll.executeScript("window.scroll(0,3000)","");
+        scroll.executeScript("window.scroll(0,3000)", "");
         Thread.sleep(3000);
 
+        //navigate to homepage
+        //chromeDriver.get("https://www.github.com/login");
+        //Thread.sleep(2000);
 
-    }
-    
-
-    @AfterTest
-    public void closeBrowser() {
-        safariDriver.quit();
-
+        chromeDriver.quit();
     }
 
 }
