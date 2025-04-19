@@ -1,4 +1,3 @@
-package Basic_SeleniumCodes;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -7,10 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.safari.SafariDriver;
-import java.util.List;
 import java.time.Duration;
-
-import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.*;
 
 
@@ -79,15 +75,17 @@ public class createRepoTest  {
         //scrolling
         JavascriptExecutor scroll = (JavascriptExecutor) safariDriver;
         scroll.executeScript("window.scroll(0,300)","");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
-        //clicking to make repo private and then public
+        //clicking to make repo private and then public, then private
         WebElement privateRepo = safariDriver.findElement(By.cssSelector("label[for=':rg:']"));
         privateRepo.click();
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         WebElement publicRepo = safariDriver.findElement(By.cssSelector("label[for=':rf:']"));
         publicRepo.click();
-        Thread.sleep(2000);
+        Thread.sleep(1000);
+        privateRepo.click();
+        Thread.sleep(1000);
 
 
         //adding a readme
@@ -118,7 +116,7 @@ public class createRepoTest  {
 
         // Type new repo name on the textbox
         WebElement renametxt = safariDriver.findElement(By.xpath("//*[@id=\"rename-field\"]"));
-        renametxt.sendKeys("GitHub Testing Report");
+        renametxt.sendKeys("GitHub Testing Report10");
         Thread.sleep(2000);
 
         //click rename button
@@ -132,7 +130,7 @@ public class createRepoTest  {
                 By.xpath("//button[contains(text(), 'Rename') and @type='submit']")));
         renameButtonConfirm.click();
         Thread.sleep(2000);
-        
+
 
 
     }
@@ -181,11 +179,118 @@ public class createRepoTest  {
         // clicks on the invite button
         WebElement inviteButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='js-selected-member-id' and text()='ymendiola17']")));
         inviteButton.click();
+        Thread.sleep(2000);
+
+        //scrolling
+        scroll.executeScript("window.scroll(0,100)","");
         Thread.sleep(3000);
+
 
     }
 
 //--------------------------------------------METHOD 4 -----------------------------------------------------------------------------
+
+
+    @BeforeMethod
+    public void addReadmeBefore() {
+        System.out.println("This method will add a readme description to the repository");
+    }
+
+    @Test(priority = 4)
+    public void addReadme() throws InterruptedException {
+        //click on code tab
+        WebElement codeTab = safariDriver.findElement(By.xpath("//span[@data-content='Code']"));
+        codeTab.click();
+        Thread.sleep(2000);
+
+        //click on the edit icon
+        WebElement editIcon = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[@aria-label='Edit file']")));
+        editIcon.click();
+        Thread.sleep(2000);
+
+        // add text to the readme
+        WebElement readme = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//*[@id=\"repo-content-pjax-container\"]/react-app/div/div/div[1]/div/div/div[2]/div[2]/div/div[3]/div[2]/div/div[2]/file-attachment/div/div/div[2]/div[2]/div")));
+        readme.clear();
+        Thread.sleep(2000);
+        readme.sendKeys("# GitHub Report \n\n testtesttesttesttesttesttesttesttesttesttesttesttest ");
+        Thread.sleep(2000);
+
+        //view preview
+        WebElement preview = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//*[@id=\"repo-content-pjax-container\"]/react-app/div/div/div[1]/div/div/div[2]/div[2]/div/div[3]/div[2]/div/div[1]/div/ul/li[2]/button/span/div")));
+        preview.click();
+        Thread.sleep(3000);
+
+        // commit changes
+        WebElement commit = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Commit changes...']")));
+        commit.click();
+        Thread.sleep(2000);
+
+        //confirm Update
+        WebElement confirmUpdate = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//span[text()='Commit changes']/ancestor::button")));
+        confirmUpdate.click();
+        Thread.sleep(2000);
+
+    }
+
+//--------------------------------------------METHOD 5 -----------------------------------------------------------------------------
+
+    @BeforeMethod
+    public void changevisibilityBefore() {
+        System.out.println("This method will change the visibility from private to public");
+    }
+
+    @Test(priority = 5)
+    public void changevisibility() throws InterruptedException {
+        //click on the settings tab
+        WebElement settings = safariDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
+        settings.click();
+        Thread.sleep(2000);
+
+        //scrolling
+        JavascriptExecutor scroll = (JavascriptExecutor) safariDriver;
+        scroll.executeScript("window.scroll(0,3000)","");
+        Thread.sleep(2000);
+
+        //clicks on the visibility button
+        WebElement visibilityButton = safariDriver.findElement(By.xpath("//span[text()='Change visibility']/ancestor::button"));
+        visibilityButton.click();
+        Thread.sleep(1000);
+
+        //clicks on change to change to public
+        WebElement changeToPublic = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//span[normalize-space()='Change to public']/ancestor::button")));
+        changeToPublic.click();
+        Thread.sleep(1000);
+
+        //clicks on first confromation message
+        WebElement confirmPublic = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//span[normalize-space()='I want to make this repository public']/ancestor::button")));
+        confirmPublic.click();
+        Thread.sleep(1000);
+
+        //2nd confirmation message
+        WebElement confirmPublic2 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//span[normalize-space()='I have read and understand these effects']/ancestor::button")));
+        confirmPublic2.click();
+        Thread.sleep(1000);
+
+        //final confirmation message
+        WebElement confirmPublic3 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//span[normalize-space()='Make this repository public']/ancestor::button")));
+        confirmPublic3.click();
+        Thread.sleep(3000);
+
+        //scroll to confirm change
+        scroll.executeScript("window.scroll(0,3000)","");
+        Thread.sleep(3000);
+
+
+    }
+    
 
     @AfterTest
     public void closeBrowser() {
