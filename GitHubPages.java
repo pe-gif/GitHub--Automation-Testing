@@ -1,65 +1,45 @@
+package githubtests;
+
 import com.google.common.io.Files;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.testng.Assert;
 import org.testng.annotations.*;
 
 
-public class githubPages {
-    WebDriver chromeDriver;
+public class GitHubPages extends BaseTest {
     WebDriverWait wait;
 
-   WebDriver setup()  {
-        /// initialize test Driver function
-        System.setProperty("webdriver.chrome.driver", "/Users/Yani/Documents/chromedriver");
-        chromeDriver = new ChromeDriver();
-        chromeDriver.get("https://www.github.com/login");
-        chromeDriver.manage().window().maximize();
-        wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(15));
-        return chromeDriver;
-    }
-
-    @Test(priority = 0)
-    public void login() throws InterruptedException {
-        chromeDriver = setup();
-        Thread.sleep(2000);
-        WebElement username = chromeDriver.findElement(By.id("login_field"));
-        username.sendKeys("githubemailtest@gmail.com");
-        Thread.sleep(1000);
-        WebElement password = chromeDriver.findElement(By.id("password"));
-        password.sendKeys("Githubpassword123-");
-        Thread.sleep(1000);
-        WebElement loginButton = chromeDriver.findElement(By.name("commit"));
-        loginButton.click();
-        Thread.sleep(1000);
-
-    }
-
-
 //--------------------------------------------METHOD 1: Access Repo method -----------------------------------------------------------------------------
-
+    @BeforeMethod
+    public void waitSetup() {
+        //increase the duration of seconds
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    }
     @Test(priority = 1)
     public void AccessRepoTest() throws InterruptedException {
         //click show more on the right side of the page
         WebElement showMoreButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("button[data-disable-with='Loading more...']")));
+                By.xpath("//button[contains(text(), 'Show more')]")));
         showMoreButton.click();
         Thread.sleep(2000);
 
         //find existing repo
-        WebElement repo = chromeDriver.findElement(By.partialLinkText("Final"));
+        WebElement repo = driver.findElement(By.partialLinkText("Final"));
         repo.click();
         Thread.sleep(2000);
 
         //get the url of the repo
-        String currentUrl = chromeDriver.getCurrentUrl();
+        String currentUrl = driver.getCurrentUrl();
         System.out.println("The url for the existing repo is " + currentUrl);
 
     }
@@ -68,8 +48,6 @@ public class githubPages {
 
     @Test(priority = 2)
     public void addFiles() throws InterruptedException {
-        //increase the duration of seconds
-        wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(20));
 
         //click add file icon
         WebElement addFile = wait.until(ExpectedConditions.elementToBeClickable(
@@ -83,7 +61,7 @@ public class githubPages {
         Thread.sleep(2000);
 
         //upload all files
-        WebElement file = chromeDriver.findElement(By.id("upload-manifest-files-input"));
+        WebElement file = driver.findElement(By.id("upload-manifest-files-input"));
         String[] filePaths = {
                 "/Users/Yani/Library/CloudStorage/OneDrive-FloridaGulfCoastUniversity/chapisGallery/index.html",
                 "/Users/Yani/Library/CloudStorage/OneDrive-FloridaGulfCoastUniversity/chapisGallery/styles.css",
@@ -100,18 +78,18 @@ public class githubPages {
         //waits until all files are updated
         wait.until(ExpectedConditions.numberOfElementsToBe(By.cssSelector(".js-manifest-file-list-root .js-manifest-file-entry"), 5));
         //confirms there are 5 files
-        Assert.assertEquals(chromeDriver.findElements(By.cssSelector(".js-manifest-file-list-root .js-manifest-file-entry")).size(), 5);
+        Assert.assertEquals(driver.findElements(By.cssSelector(".js-manifest-file-list-root .js-manifest-file-entry")).size(), 5);
         System.out.println("5 files have been uploaded to the repository.");
 
 
         // commit message
-        WebElement commitMessage = chromeDriver.findElement(By.id("commit-summary-input"));
+        WebElement commitMessage = driver.findElement(By.id("commit-summary-input"));
         commitMessage.sendKeys("Added files to the repository via automation");
         Thread.sleep(2000);
 
 
         //scrolling
-        JavascriptExecutor scroll = (JavascriptExecutor) chromeDriver;
+        JavascriptExecutor scroll = (JavascriptExecutor) driver;
         scroll.executeScript("window.scroll(0,500)","");
 
         //commit changes
@@ -167,22 +145,22 @@ public class githubPages {
     @Test(priority = 4, dependsOnMethods = "pages")
     public void configureAbout() throws InterruptedException {
         //click on code tab
-        WebElement codeTab = chromeDriver.findElement(By.xpath("//span[@data-content='Code']"));
+        WebElement codeTab = driver.findElement(By.xpath("//span[@data-content='Code']"));
         codeTab.click();
         Thread.sleep(3000);
 
         //click on the settings tab
-        WebElement settings = chromeDriver.findElement(By.cssSelector("svg[aria-label='Edit repository metadata']"));
+        WebElement settings = driver.findElement(By.cssSelector("svg[aria-label='Edit repository metadata']"));
         settings.click();
         Thread.sleep(3000);
 
         //click on the description textbox
-        WebElement desc = chromeDriver.findElement(By.id("repo_description"));
+        WebElement desc = driver.findElement(By.id("repo_description"));
         desc.sendKeys("Below is the link for the website");
         Thread.sleep(3000);
 
         //check box to use the deployed website
-        WebElement websiteCheckBox = chromeDriver.findElement(By.xpath("//*[@id=\"repo_sections_pages_url\"]"));
+        WebElement websiteCheckBox = driver.findElement(By.xpath("//*[@id=\"repo_sections_pages_url\"]"));
         websiteCheckBox.click();
         Thread.sleep(3000);
 
@@ -191,7 +169,9 @@ public class githubPages {
         WebElement saveChanges = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                 "//button[contains(text(), 'Save changes')]")));
         saveChanges.click();
-        Thread.sleep(10000);
+        Thread.sleep(20000);
+        Thread.sleep(20000);
+        Thread.sleep(20000);
 
 
     }
@@ -207,45 +187,65 @@ public class githubPages {
         link.click();
 
         // Store the current window handle
-        String originalWindow = chromeDriver.getWindowHandle();
+        String originalWindow = driver.getWindowHandle();
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
         // Switch to the new window
-        for (String windowHandle : chromeDriver.getWindowHandles()) {
+        for (String windowHandle : driver.getWindowHandles()) {
             if (!windowHandle.equals(originalWindow)) {
-                chromeDriver.switchTo().window(windowHandle);
+                driver.switchTo().window(windowHandle);
                 break;
             }
 
 
-            String currentUrl = chromeDriver.getCurrentUrl();
-            System.out.println("The url for the hosted webpage is " + currentUrl);
         }
+        String currentUrl = driver.getCurrentUrl();
+        System.out.println("The url for the hosted webpage is " + currentUrl);
+        Thread.sleep(2000);
 
     }
 //--------------------------------------------METHOD 6: take screenshot-----------------------------------------------------------------------------
 
     @Test(priority = 6, dependsOnMethods = "accessWebsite")
     public void takeScreenshot() throws InterruptedException, IOException {
-        Thread.sleep(5000);
+        Thread.sleep(1000);
 
         //take screenshot
-        TakesScreenshot screenshot = (TakesScreenshot) chromeDriver;
+        TakesScreenshot screenshot = (TakesScreenshot) driver;
         File source = screenshot.getScreenshotAs(OutputType.FILE);
 
         // Define destination file path
-        File destination = new File("/Users/Yani/Library/CloudStorage/OneDrive-FloridaGulfCoastUniversity/CEN4072-Java Projects/GitHubTesting-Project/websiteScreenshot.png");
+        File destination = new File("/Users/Yani/Library/CloudStorage/OneDrive-FloridaGulfCoastUniversity/githubtests/GitHubAutomationTestingProject/websiteScreenshot.png");
         Files.copy(source, destination); //save screenshot
         //confirm screenshot has been taken
         System.out.println("Screenshot saved to: " + destination.getAbsolutePath());
 
+    }
 
-        Thread.sleep(3000);
+    @Test (priority = 7)
+    public void closeTab() throws InterruptedException {
+        // Store all open tabs
+        Set<String> allTabs = driver.getWindowHandles();
+        List<String> tabList = new ArrayList<>(allTabs);
 
-        chromeDriver.quit();
+        // Store the current tab == githubPages Website
+        String currentTab = driver.getWindowHandle();
 
+        // Close the current tab
+        driver.close();
+
+        // Switch back to githubPages Website tab
+        for (String tab : tabList) {
+            if (!tab.equals(currentTab)) {
+                driver.switchTo().window(tab);
+                break;
+            }
+        }
+        Thread.sleep(1000);
+
+        //navigate back to homepage
+        driver.get("https://www.github.com/");
 
     }
 
 }
-
