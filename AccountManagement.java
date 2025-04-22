@@ -90,7 +90,7 @@ public class AccountManagement extends BaseTest {
         WebElement fileInput = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.id("avatar_upload")
         ));
-        fileInput.sendKeys("/Users/erick/Git Hub Automation/Profile Picture.png");
+        fileInput.sendKeys("/Users/Yani/Downloads/Profile_Picture.png");
         Thread.sleep(1500); // Wait for preview to load
 
         // Click "Set new profile picture"
@@ -259,6 +259,9 @@ public class AccountManagement extends BaseTest {
         Thread.sleep(800);
         driver.findElement(By.id("user_paste_url_markdown_true")).click();
         Thread.sleep(1000);
+
+        driver.get("https://github.com/");
+        Thread.sleep(2000);
     }
 
     // Scroll helper method for potential future use
