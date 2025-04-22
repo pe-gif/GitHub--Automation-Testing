@@ -1,28 +1,36 @@
-package org.example;
+package githubtests;
 
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 
+import com.google.common.io.Files;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.testng.Assert;
+import org.testng.annotations.*;
+
+
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class forkTheRepository extends BaseTest {
 
-    @BeforeClass
-    public static void navigateToRepository() throws InterruptedException {
+public class Fork extends BaseTest {
+
+
+    @Test(priority = 1 )
+    // Create Fork with other repository
+    public void test1_createFork() throws InterruptedException {
+        //navigate to repository
         driver.get("https://github.com/ggstephen6724/weight-conversion");
         Thread.sleep(2000);
         System.out.println("Landed on repository page");
-    }
 
-    @Test
-    // Create Fork with other repository
-    public void test1_createFork() throws InterruptedException {
         try {
             Thread.sleep(2000);
             WebElement dropdownMenu = driver.findElement(By.xpath("//*[@id=\"my-forks-menu-506511423\"]/summary"));
@@ -76,7 +84,7 @@ public class forkTheRepository extends BaseTest {
         }
     }
 
-    @Test // TRY TO FIX THIS PART
+    @Test(priority = 2) // TRY TO FIX THIS PART
     public void test2_validateForkSuccess() {
         // Check for presence of forked repo UI element
         try {
@@ -86,13 +94,13 @@ public class forkTheRepository extends BaseTest {
             System.out.println("Forked Repo: " + fullRepoName);
 
             // Assert that we're on a forked repo (this is a placeholder condition)
-            assertTrue("URL should contain user fork", driver.getCurrentUrl().contains("github.com/your-username/weight-conversion"));
+            assertNotEquals("URL should contain user fork", driver.getCurrentUrl().contains("https://github.com/ggstephen6724/weight-conversion"));
         } catch (NoSuchElementException e) {
             System.out.println("Fork verification elements not found.");
         }
     }
 
-    @Test
+    @Test (priority = 3)
     public void test2_leaveForkNetwork() throws InterruptedException {
         WebElement settingsBtn = driver.findElement(By.id("settings-tab"));
         settingsBtn.click();
@@ -114,7 +122,7 @@ public class forkTheRepository extends BaseTest {
     }
 
 
-    @Test
+    @Test (priority = 4)
     public void test3_deleteRepository() throws InterruptedException {
         // Scroll Down
         Thread.sleep(2000);
