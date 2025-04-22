@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="githubtests">
+
+        <!-- Test 1 - Erick -->
+        <test name="GitHubLoginTest">
+            <classes>
+                <class name="githubtests.Login"/>
+            </classes>
+        </test>
+
+        <!-- Test 2 - Erick -->
+        <test name="GitHubAccountManagementTest" >
+            <classes>
+                <class name="githubtests.AccountManagement"/>
+            </classes>
+        </test>
+
+        <!-- Test 3 - Yanisley -->
+        <test name="CreateRepoTest">
+            <classes>
+                <class name="githubtests.CreateRepo"/>
+            </classes>
+        </test>
+
+        <!-- Test 4 - Yanisley -->
+        <test name="GitHubPagesTest">
+            <classes>
+                <class name="githubtests.GitHubPages"/>
+            </classes>
+        </test>
+
+
+        <!-- Test 5 - George -->
+        <test name="SearchTest">
+            <classes>
+                <class name="githubtests.Search"></class>
+            </classes>
+        </test>
+
+        <!-- Test 6 - George -->
+        <test name="ForkTheRepository">
+            <classes>
+                <class name="githubtests.Fork"></class>
+            </classes>
+        </test>
+
+
+        <!-- Test 7 - Peter -->
+         <test name="Issue">
+            <classes>
+                <class name="githubtests.Issue"></class>
+            </classes>
+        </test>
+
+        <!-- Test 8 - Peter -->
+        <test name="CreateDocTest">
+            <classes>
+            <class name="githubtests.CreateDoc"></class>
+            </classes>
+        </test>
+
+
+
+</suite>
