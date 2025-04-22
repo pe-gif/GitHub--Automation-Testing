@@ -1,4 +1,9 @@
+package githubtests;
+
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -9,34 +14,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class Tests {
+import java.time.Duration;
 
-    /// initialize test Driver function
+public class Issue extends BaseTest {
+    WebDriverWait wait;
 
-    WebDriver driver = new ChromeDriver();
-
-    @BeforeTest
-    public void setUp() throws Exception {
-        System.setProperty("webdriver.google.driver", "C:\\Users\\peter\\Downloads\\chromedriver-win64\\chromedriver.exe");
-        driver.get("https://www.google.com");
-        driver.manage().window().maximize();
-        driver.get("https://www.github.com/login");
-        
-        //login into github account
-        driver.findElement(By.id("login_field")).sendKeys("githubemailtest@gmail.com");
-        Thread.sleep(500);
-
-        driver.findElement(By.id("password")).sendKeys("Githubpassword123-");
-        Thread.sleep(500);
-
-        driver.findElement(By.name("commit")).click();
-        Thread.sleep(500);
-
-    }
-
-    @Test
+    @Test(priority = 1)
     public void Create_Issue() throws Exception {
-        System.setProperty("webdriver.google.driver", "C:\\Users\\peter\\Downloads\\chromedriver-win64\\chromedriver.exe");
         //opens issue github page
         driver.get("https://github.com/issues/assigned");
         Thread.sleep(2000);
@@ -55,7 +39,7 @@ public class Tests {
         driver.findElement(By.xpath("//span[text()='Create']")).click();
     }
 
-    @Test
+    @Test(priority = 2)
     public void Assign_To() throws Exception {
         driver.get("https://github.com/issues/assigned");
         Thread.sleep(1000);
@@ -76,7 +60,7 @@ public class Tests {
 
     }
 
-    @Test
+    @Test(priority = 3)
     public void Create_Sub() throws Exception {
         driver.get("https://github.com/issues/assigned");
         Thread.sleep(1000);
@@ -102,7 +86,7 @@ public class Tests {
         driver.findElement(By.xpath("//span[text()='Create']")).click();
     }
 
-    @Test
+    @Test(priority = 4)
     public void Comment() throws Exception {
         driver.get("https://github.com/issues/assigned");
         Thread.sleep(1000);
@@ -125,7 +109,7 @@ public class Tests {
         Thread.sleep(1000);
     }
 
-    @Test
+    @Test(priority = 5)
     public void Deletes() throws Exception {
         driver.get("https://github.com/issues/assigned");
         Thread.sleep(1000);
@@ -140,18 +124,11 @@ public class Tests {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollBy(0, 1000)");
 
-        //Deletes and confirms the issue 
+        //Deletes and confirms the issue
         driver.findElement(By.xpath("//span[text()='Delete issue']")).click();
         Thread.sleep(1000);
 
         driver.findElement(By.xpath("//span[text()='Delete']")).click();
         Thread.sleep(1000);
-    }
-
-    @AfterTest
-    public void tearDown() throws Exception {
-        driver.get("https://github.com/issues/created");
-        Thread.sleep(2000);
-        driver.quit();
     }
 }
