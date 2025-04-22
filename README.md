@@ -9,6 +9,6 @@ This Repository contains the report and the .java file of an automation testing 
   5. Hosting a repository
   6. Issue
   7. pull
-  8. TBA
+  8. forTheRepository
 
 The tools and frameworks used include Java, Maven, TestNG, Selenium, and chromeWebDriver.
