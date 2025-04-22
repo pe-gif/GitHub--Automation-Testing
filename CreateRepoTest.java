@@ -1,57 +1,29 @@
+package githubtests;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
 import org.testng.annotations.*;
 
+import java.time.Duration;
 
-public class createRepoTest {
-    WebDriver chromeDriver;
+
+public class CreateRepo extends BaseTest {
     WebDriverWait wait;
-
-
-    @BeforeTest
-    public void setuptest() {
-        System.out.println("This class will be an automation test to create a repository and interact with some of the" +
-                "options.");
-
-    }
-    WebDriver setup()  {
-        /// initialize test Driver function
-        System.setProperty("webdriver.chrome.driver", "/Users/Yani/Documents/chromedriver");
-        chromeDriver = new ChromeDriver();
-        chromeDriver.get("https://www.github.com/login");
-        chromeDriver.manage().window().maximize();
-        wait = new WebDriverWait(chromeDriver, Duration.ofSeconds(3));
-        return chromeDriver;
-    }
-
-    @Test(priority = 0)
-    public void login() throws InterruptedException {
-        chromeDriver = setup();
-        Thread.sleep(2000);
-        WebElement username = chromeDriver.findElement(By.id("login_field"));
-        username.sendKeys("githubemailtest@gmail.com");
-        Thread.sleep(2000);
-        WebElement password = chromeDriver.findElement(By.id("password"));
-        password.sendKeys("Githubpassword123-");
-        Thread.sleep(2000);
-        WebElement loginButton = chromeDriver.findElement(By.name("commit"));
-        loginButton.click();
-        Thread.sleep(2000);
-
-
-    }
 
 //--------------------------------------------METHOD 1: create Repo -----------------------------------------------------------------------------
 
+     @BeforeMethod
+     public void waitSetup() {
+         //create wait
+         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+     }
     @Test(priority = 1)
     public void testCreateRepo() throws InterruptedException {
+
 
         /// This function waits for the dropdown menu and then clicks it
         WebElement moreButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("global-create-menu-anchor")));
@@ -64,21 +36,21 @@ public class createRepoTest {
         Thread.sleep(2000);
 
         //Inserting text into textbox
-        WebElement repoName = chromeDriver.findElement(By.cssSelector(
+        WebElement repoName = driver.findElement(By.cssSelector(
                 "input[aria-describedby*='RepoNameInput-message']"));
         repoName.sendKeys("test_repo");
         Thread.sleep(1000);
 
         //scrolling
-        JavascriptExecutor scroll = (JavascriptExecutor) chromeDriver;
+        JavascriptExecutor scroll = (JavascriptExecutor) driver;
         scroll.executeScript("window.scroll(0,300)","");
         Thread.sleep(1000);
 
         //clicking to make repo private and then public, then private
-        WebElement privateRepo = chromeDriver.findElement(By.cssSelector("label[for=':rg:']"));
+        WebElement privateRepo = driver.findElement(By.cssSelector("label[for=':rg:']"));
         privateRepo.click();
         Thread.sleep(1000);
-        WebElement publicRepo = chromeDriver.findElement(By.cssSelector("label[for=':rf:']"));
+        WebElement publicRepo = driver.findElement(By.cssSelector("label[for=':rf:']"));
         publicRepo.click();
         Thread.sleep(1000);
         privateRepo.click();
@@ -86,17 +58,17 @@ public class createRepoTest {
 
 
         //adding a readme
-        WebElement addReadMe = chromeDriver.findElement(By.cssSelector("label[for=':ri:']"));
+        WebElement addReadMe = driver.findElement(By.cssSelector("label[for=':ri:']"));
         addReadMe.click();
         Thread.sleep(2000);
 
         //click repository button
-        WebElement createRepoButton = chromeDriver.findElement(By.xpath(
+        WebElement createRepoButton = driver.findElement(By.xpath(
                 "/html/body/div[1]/div[5]/main/react-app/div/form/div[6]/button/span/span"));
         createRepoButton.click();
         Thread.sleep(3000);
 
-        String repoLnk = chromeDriver.getCurrentUrl();
+        String repoLnk = driver.getCurrentUrl();
         System.out.println("The url for the created repository is " + repoLnk);
     }
 
@@ -105,12 +77,12 @@ public class createRepoTest {
     @Test(priority = 2, dependsOnMethods = "testCreateRepo")
     public void renameRepo() throws InterruptedException {
         //click on the settings tab
-        WebElement settings = chromeDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
+        WebElement settings = driver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
         settings.click();
         Thread.sleep(2000);
 
         // Type new repo name on the textbox
-        WebElement renametxt = chromeDriver.findElement(By.xpath("//*[@id=\"rename-field\"]"));
+        WebElement renametxt = driver.findElement(By.xpath("//*[@id=\"rename-field\"]"));
         renametxt.clear();
         renametxt.sendKeys("GitHub Report Final");
         Thread.sleep(2000);
@@ -137,7 +109,7 @@ public class createRepoTest {
     @Test(priority = 3, dependsOnMethods = "renameRepo")
     public void addContributors() throws InterruptedException {
         //click on the settings tab
-        WebElement settings = chromeDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
+        WebElement settings = driver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
         settings.click();
         Thread.sleep(2000);
 
@@ -148,12 +120,12 @@ public class createRepoTest {
         Thread.sleep(2000);
 
         //scrolling
-        JavascriptExecutor scroll = (JavascriptExecutor) chromeDriver;
+        JavascriptExecutor scroll = (JavascriptExecutor) driver;
         scroll.executeScript("window.scroll(0,100)","");
         Thread.sleep(2000);
 
         //clicks on the add people button
-        WebElement addPpl = chromeDriver.findElement(By.xpath("//span[text()='Add people']"));
+        WebElement addPpl = driver.findElement(By.xpath("//span[text()='Add people']"));
         addPpl.click();
         Thread.sleep(2000);
 
@@ -184,7 +156,7 @@ public class createRepoTest {
     @Test(priority = 4)
     public void addReadme() throws InterruptedException {
         //click on code tab
-        WebElement codeTab = chromeDriver.findElement(By.xpath("//span[@data-content='Code']"));
+        WebElement codeTab = driver.findElement(By.xpath("//span[@data-content='Code']"));
         codeTab.click();
         Thread.sleep(2000);
 
@@ -227,17 +199,17 @@ public class createRepoTest {
     @Test(priority = 5)
     public void changevisibility() throws InterruptedException {
         //click on the settings tab
-        WebElement settings = chromeDriver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
+        WebElement settings = driver.findElement(By.xpath("//*[@id=\"settings-tab\"]/span[1]"));
         settings.click();
         Thread.sleep(2000);
 
         //scrolling
-        JavascriptExecutor scroll = (JavascriptExecutor) chromeDriver;
+        JavascriptExecutor scroll = (JavascriptExecutor) driver;
         scroll.executeScript("window.scroll(0,3000)", "");
         Thread.sleep(2000);
 
         //clicks on the visibility button
-        WebElement visibilityButton = chromeDriver.findElement(By.xpath("//span[text()='Change visibility']/ancestor::button"));
+        WebElement visibilityButton = driver.findElement(By.xpath("//span[text()='Change visibility']/ancestor::button"));
         visibilityButton.click();
         Thread.sleep(1000);
 
@@ -270,10 +242,10 @@ public class createRepoTest {
         Thread.sleep(3000);
 
         //navigate to homepage
-        //chromeDriver.get("https://www.github.com/login");
-        //Thread.sleep(2000);
+        driver.get("https://www.github.com/");
+        Thread.sleep(2000);
 
-        chromeDriver.quit();
+
     }
 
 }
