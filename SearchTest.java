@@ -1,15 +1,23 @@
-package org.example;
+package githubtests;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import com.google.common.io.Files;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SearchTest extends BaseTest {
+import org.testng.Assert;
+import org.testng.annotations.*;
 
-    @Test
+
+public class Search extends BaseTest {
+
+    @Test(priority = 1)
     public void test1_NonExistentRepoSearch() throws InterruptedException {
         WebElement searchButton = driver.findElement(By.xpath("/html/body/div[1]/div[1]/header/div/div[2]/div[1]/qbsearch-input/div[1]/div[1]/div/div/button"));
         searchButton.click();
@@ -22,7 +30,7 @@ public class SearchTest extends BaseTest {
         Thread.sleep(3000);
     }
 
-    @Test
+    @Test(priority = 2)
     public void test2_ExistingRepoSearch() throws InterruptedException {
         Thread.sleep(2000);
         WebElement searchButton2 = driver.findElement(By.xpath("/html/body/div[1]/div[1]/header/div/div[2]/div[1]/qbsearch-input/div[1]/div[1]/div/div/button"));
@@ -34,7 +42,7 @@ public class SearchTest extends BaseTest {
         Thread.sleep(3000);
     }
 
-    @Test
+    @Test(priority = 3)
     public void test3_FilterByLanguage() throws InterruptedException {
         Thread.sleep(2000);
         WebElement C_plusplusButton = driver.findElement(By.xpath("/html/body/div[1]/div[5]/main/react-app/div/div/div[1]/div/div/div[1]/div[2]/div/div/div/div/ul/li[3]/ul/li[6]"));
@@ -42,7 +50,7 @@ public class SearchTest extends BaseTest {
         Thread.sleep(2000);
     }
 
-    @Test
+    @Test(priority = 4)
     public void test4_SortByStars() throws InterruptedException {
         Thread.sleep(2000);
         WebElement sortButton = driver.findElement(By.xpath("/html/body/div[1]/div[5]/main/react-app/div/div/div[1]/div/div/div[2]/div[2]/div/div[1]/div[1]/div/div/div[1]"));
@@ -52,7 +60,7 @@ public class SearchTest extends BaseTest {
         Thread.sleep(2000);
     }
 
-    @Test
+    @Test(priority = 5)
     public void test5_EmptySearch() throws InterruptedException {
         WebElement searchButton3 = driver.findElement(By.xpath("/html/body/div[1]/div[1]/header/div/div[2]/div[1]/qbsearch-input/div[1]/div[1]/div/div/button"));
         searchButton3.click();
