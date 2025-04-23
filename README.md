@@ -4,11 +4,11 @@ This Repository contains the report and the .java file of an automation testing 
   
   1. login
   2. Profile configuration
-  3. search 
-  4. creating a repository
-  5. Hosting a repository
-  6. Issue
-  7. pull
-  8. forTheRepository
+  3. search
+  4. ForkTheRepository
+  5. creating a repository
+  6. Hosting a repository
+  7. Issue
+  8. pull
 
 The tools and frameworks used include Java, Maven, TestNG, Selenium, and chromeWebDriver.
